@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <div class="row d-flex justify-content-center">
+        <h1 class="d-flex justify-content-center col-6 ">Login to Access Mr M.'s Premium Content</h1>
+    </div>
+    <div class="form-row d-flex justify-content-center">
+        <div class="col-6">
+            <label class="my-1 mr-2 border p-4" for="inlineFormCustomSelectPref">Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <div class="input-group-text">Email</div>
+              </div>
+              <input type="text" class="form-control" id="frmemail" placeholder="Please enter email">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <div class="input-group-text">Password</div>
+              </div>
+              <input type="password" class="form-control" id="frmpsd" placeholder="Please enter password">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                <div id="botQ" class="input-group-text">
+
+                </div>
+              </div>
+              <input type="number" class="form-control" id="frmcheck" placeholder="">
+            </div>
+            <div class="input-group mb-3">
+                <button id="login" class="btn">Login</button>
+            </div>
+            <div>
+              <h6 id="err" style="display:none"></h6>
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+
+        let botAnswer = -1;
+
+        let generateBotQ = () =>{
+            let rand1 = Math.floor(Math.random()*23);
+            let rand2 = Math.floor(Math.random()*23);
+
+            botAnswer = rand1+rand2;
+
+            console.log(rand1);
+            console.log(rand2);
+
+            $("#botQ").text("What's " + rand1 + "+" + rand2);
+            // document.getElementById("botQ").value = "What's" + rand1 + rand2;
+            console.log(botAnswer);
+        }
+
+        let loginClicked = () =>{
+            let email = document.getElementById("frmemail").value;
+            let pass = document.getElementById("frmpsd").value;
+            let num = document.getElementById("frmcheck").value;
+            
+            if(email.indexOf("@") == -1  ||  email.indexOf(".") == -1  ||  email.indexOf("org") == -1){
+              let emailerr = "Email requires:<br> hello"
+              $("#err").text(emailerr);
+              $("#err").fadeIn("slow");
+              console.log("email done")
+            }
+            else if(pass.length<5 || pass.indexOf("*") > -1 || pass.indexOf("$") > -1){
+
+            }
+            else{
+              $("#err").hide();
+            }
+            
+        }
+
+        
+        window.addEventListener("load",generateBotQ);
+        document.getElementById("login").addEventListener("click",loginClicked);
+
+    </script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
