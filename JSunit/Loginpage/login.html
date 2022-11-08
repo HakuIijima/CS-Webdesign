@@ -14,11 +14,30 @@
   </head>
   <body>
     <div class="row d-flex justify-content-center">
-        <h1 class="d-flex justify-content-center col-6 ">Login to Access Mr M.'s Premium Content</h1>
+        <h1 class="d-flex justify-content-center col-sm-6 col-12">Login to Access Mr M.'s Premium Content</h1>
     </div>
     <div class="form-row d-flex justify-content-center">
-        <div class="col-6">
-            <label class="my-1 mr-2 border p-4" for="inlineFormCustomSelectPref">Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</label>
+      
+        <select class="form-control col-3" id="pwordselect">
+          <option value="">Pass test</option>
+          <option value="pworddollarsign">$ sign in pword</option>
+          <option value="pwordasterisk">* in pword</option>
+          <option value="pwordtooshort">Too Short</option>
+          <option value="pwordallgood">Pword is good</option>
+        </select>
+        <select class="form-control col-3" id="emailselect">
+          <option value="">Email test</option>
+          <option value="emailtooshort">Email is too short</option>
+          <option value="emailno@">Email has no @</option>
+          <option value="emailno.">Email has no .</option>
+          <option value="email.before@">. doesnt come before @</option>
+          <option value="emailallgood">Email is good</option>
+        </select>
+      
+    </div>
+    <div class="form-row d-flex justify-content-center">
+        <div class="col-sm-6 col-12 ">
+            <label class="my-1 mr-2 border p-4 rounded" for="inlineFormCustomSelectPref">Upgrade your <u>life</u> by accessing these premium educational content including a calculator that will tell you how many years you have been alive!!</label>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                 <div class="input-group-text">Email</div>
@@ -42,8 +61,8 @@
             <div class="input-group mb-3">
                 <button id="login" class="btn">Login</button>
             </div>
-            <div>
-              <h6 id="err" style="display:none"></h6>
+            <div id="err" class="bg-danger p-2 text-white rounded" style="display:none">
+              <h6></h6>
             </div>
         </div>
 
@@ -51,45 +70,160 @@
     
     <script>
 
-        let botAnswer = -1;
+      let botAnswer = -1;
 
-        let generateBotQ = () =>{
-            let rand1 = Math.floor(Math.random()*23);
-            let rand2 = Math.floor(Math.random()*23);
+      let generateBotQ = () => {
+          let rand1 = Math.floor(Math.random() * 23);
+          let rand2 = Math.floor(Math.random() * 23);
 
-            botAnswer = rand1+rand2;
+          botAnswer = rand1 + rand2;
 
-            console.log(rand1);
-            console.log(rand2);
+          console.log(rand1);
+          console.log(rand2);
 
-            $("#botQ").text("What's " + rand1 + "+" + rand2);
-            // document.getElementById("botQ").value = "What's" + rand1 + rand2;
-            console.log(botAnswer);
-        }
+          $("#botQ").text("What's " + rand1 + "+" + rand2);
+          // document.getElementById("botQ").value = "What's" + rand1 + rand2;
+          console.log(botAnswer);
+      }
 
-        let loginClicked = () =>{
-            let email = document.getElementById("frmemail").value;
-            let pass = document.getElementById("frmpsd").value;
-            let num = document.getElementById("frmcheck").value;
-            
-            if(email.indexOf("@") == -1  ||  email.indexOf(".") == -1  ||  email.indexOf("org") == -1){
-              let emailerr = "Email requires:<br> hello"
-              $("#err").text(emailerr);
+      let isValidEmail = (str) => {
+        console.log(str);
+        console.log(str.lastIndexOf("@"));
+        console.log(str.lastIndexOf(".") );
+          if (str.indexOf("@") == -1 || str.indexOf(".") == -1 || str.lastIndexOf("@") > str.lastIndexOf(".") || str.length < 5) {
+              return false;
+          }
+          return true;
+      }
+
+      let isValidPass = (str) => {
+          if (str.indexOf("$") != -1 || str.indexOf("*") != -1 || str.length < 5) {
+              return false;
+          }
+          return true;
+      }
+
+      let isValidBot = (str) => {
+          if (str != botAnswer) {
+              return false;
+          }
+          return true;
+      }
+      
+      let loginClicked = () => {
+
+          let email = document.getElementById("frmemail").value;
+          let pass = document.getElementById("frmpsd").value;
+          let num = document.getElementById("frmcheck").value;
+
+          let emailV = isValidEmail(email);
+          let passV = isValidPass(pass);
+          let numV = isValidBot(num);
+
+          $("#err").fadeOut();
+
+          if (emailV == false) {
+              let emailerr = "Email requires:<br><br>";
+              emailerr += "<li>Longer than 5 characters</li>";
+              emailerr += "<li>Contians '@'</li>";
+              emailerr += "<li>Contians '.'</li>";
+              emailerr += "<li>'@' comes before '.'</li>";
+              $("#err").html(emailerr);
               $("#err").fadeIn("slow");
-              console.log("email done")
-            }
-            else if(pass.length<5 || pass.indexOf("*") > -1 || pass.indexOf("$") > -1){
+              document.getElementById("frmemail").select();
+          } else if (passV == false) {
+              let passerr = "Password requires:<br><br>";
+              passerr += "<li>Longer than 5 characters</li>";
+              passerr += "<li>Does not contians '$'</li>";
+              passerr += "<li>Does not contians '*'</li>";
+              $("#err").html(passerr);
+              $("#err").fadeIn("slow");
+              document.getElementById("frmpsd").select();
+          } else if (numV == false) {
+              let numerr = "Capcha does not match";
 
-            }
-            else{
-              $("#err").hide();
-            }
-            
+              $("#err").html(numerr);
+              $("#err").fadeIn("slow");
+
+              document.getElementById("frmcheck").select();
+              generateBotQ();
+          } else {
+              $("#err").fadeOut();
+          }
+
+      }
+
+      let pWordSelect = document.getElementById("pwordselect");
+
+      pWordSelect.addEventListener("change", function(evt){
+        let selected = document.getElementById("pwordselect").value;
+        console.log(selected);
+
+        let pWordElem = document.getElementById("frmpsd");
+
+        document.getElementById("frmemail").value = "haku.iijima@gmail.com";
+        document.getElementById("frmcheck").value = botAnswer;
+
+        if(selected == "pwordtooshort"){
+          pWordElem.value = "123";
         }
+        if(selected == "pworddollarsign"){
+          pWordElem.value = "123$12";
+        }
+        if(selected == "pwordasterisk"){
+          pWordElem.value = "123*as";
+        }
+        if(selected == "pwordallgood"){
+          pWordElem.value = 123123;
+        }
+
+        loginClicked();
 
         
-        window.addEventListener("load",generateBotQ);
-        document.getElementById("login").addEventListener("click",loginClicked);
+      })
+
+      let EmailSelect = document.getElementById("emailselect");
+
+      EmailSelect.addEventListener("change", function(evt){
+        let selected = document.getElementById("emailselect").value;
+        console.log(selected);
+
+        let EmailElem = document.getElementById("frmemail");
+
+        document.getElementById("frmpsd").value = "123123";
+        document.getElementById("frmcheck").value = botAnswer;
+
+        if(selected == "emailtooshort"){
+          EmailElem.value = "@i.c";
+        }
+        if(selected == "emailno@"){
+          EmailElem.value = "iijimahharrisoncsd.org";
+        }
+        if(selected == "emailno."){
+          EmailElem.value = "iijimah@harrisoncsdorg";
+        }
+        if(selected == "email.before@"){
+          EmailElem.value = "iiji.mah@harrisoncsdorg";
+        }
+        if(selected == "emailallgood"){
+          EmailElem.value = "haku.iijima@gmail.com";
+        }
+
+        loginClicked();
+
+        
+      })
+
+
+
+
+      // <option value="emailtooshort">Email is too short</option>
+      //     <option value="emailno@">Email has no @</option>
+      //     <option value="emailno.">Email has no .</option>
+      //     <option value="email.before@">. doesnt come before @</option>
+
+      window.addEventListener("load", generateBotQ);
+      document.getElementById("login").addEventListener("click", loginClicked);
 
     </script>
 
